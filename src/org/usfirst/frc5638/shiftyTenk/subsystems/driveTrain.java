@@ -66,5 +66,8 @@ public class driveTrain extends Subsystem {
 		// TODO Auto-generated method stub
 		robotDrive.arcadeDrive(0, 0);
 	}
+	public void rotateAngle(double rotateValue) { 
+		robotDrive.arcadeDrive(0, rotateValue);
+	}
 }
 

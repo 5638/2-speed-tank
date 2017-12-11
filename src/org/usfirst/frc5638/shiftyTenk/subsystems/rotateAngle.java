@@ -20,6 +20,7 @@ public class rotateAngle extends Subsystem implements PIDOutput {
 	AHRS ahrs;
 	PIDController turnController;
 	double rotateToAngleRate;
+	double currentRotationRate;
 	
 	//Tune this vvvvv
 	
@@ -69,12 +70,11 @@ public class rotateAngle extends Subsystem implements PIDOutput {
 		// TODO Auto-generated method stub
 		rotateToAngleRate = output;
 	}
-	
-	boolean rotateToAngle = false;
+
 	
 	public void rotate(double angle) {
 		turnController.setSetpoint(angle);
-		rotateToAngle = true;
+		turnController.enable();
 	}
 }
 

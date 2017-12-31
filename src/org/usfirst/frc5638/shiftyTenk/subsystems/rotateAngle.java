@@ -29,7 +29,7 @@ public class rotateAngle extends PIDSubsystem implements PIDOutput {
 	//Tune this vvvvv
 	
 	static final double kP = 10;
-	static final double kI = 0.0;
+	static final double kI = 0.0;		//BAD VALUES
 	static final double kD = 0.00;
 	static final double kF = .00;
 	
@@ -40,7 +40,7 @@ public class rotateAngle extends PIDSubsystem implements PIDOutput {
 
 
     public rotateAngle() {
-    	super("rotateAngle", 1.0, 0.0, 0.0);
+    	super("rotateAngle", kP, kI, kD);
     	setAbsoluteTolerance(kToleranceDegrees);
     	getPIDController().setContinuous(true);
     	LiveWindow.addActuator("rotateAngle", "PIDSubsystem Controller", getPIDController());
@@ -83,10 +83,8 @@ public class rotateAngle extends PIDSubsystem implements PIDOutput {
     }
     
 	
-	public void pidWrite(double output) {
-		// TODO Auto-generated method stub
-		rotateToAngleRate = output;
-	}
+
+	
 /*
 	
 	public void rotate0() {
@@ -125,13 +123,18 @@ public class rotateAngle extends PIDSubsystem implements PIDOutput {
 	@Override
 	protected double returnPIDInput() {
 		// TODO Auto-generated method stub
-		return ahrs.pidGet();
+		return ahrs.getYaw();
 	}
-
+	
 	@Override
 	protected void usePIDOutput(double output) {
 		// TODO Auto-generated method stub
 		Robot.driveTrain.rotateAngle(output);
+	}
+
+	@Override
+	public void pidWrite(double output) {
+		// TODO Auto-generated method stub
 		
 	}
 }

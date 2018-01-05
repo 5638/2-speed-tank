@@ -12,8 +12,8 @@ public class encoderCom extends Command {
 	
 	private float m_setpoint;
 
-    public encoderCom(float setpoint) {
-    	m_setpoint = setpoint;
+    public encoderCom(int setpoint) {
+    	int m_setpoint = setpoint;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.encoder);
@@ -21,8 +21,8 @@ public class encoderCom extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	RobotMap.driveTrainleft.setSetpoint(m_setpoint);
-    	RobotMap.driveTrainright.setSetpoint(m_setpoint);
+    	RobotMap.driveTrainleft.setSelectedSensorPosition( (int)m_setpoint, 0, 10);
+    	RobotMap.driveTrainright.setSelectedSensorPosition( (int)m_setpoint, 0, 10);
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -3,7 +3,9 @@ package org.usfirst.frc5638.shiftyTenk.subsystems;
 import org.usfirst.frc5638.shiftyTenk.Robot;
 import org.usfirst.frc5638.shiftyTenk.RobotMap;
 
-import com.ctre.MotorControl.SmartMotorController.TalonControlMode;
+//import com.ctre.MotorControl.SmartMotorController.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motion.*;
 
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -21,22 +23,35 @@ public class encoder extends Subsystem {
 	int profile = 0; //0 or 1
 	private double m_outputleft;
 	private double m_outputright;
-	public double setpointleft;
-	public double setpointright;
+	public int setpointleft;
+	public int setpointright;
     // Initialize your subsystem here
     public encoder() {
-    	RobotMap.driveTrainleft.changeControlMode(TalonControlMode.Position);
-    	RobotMap.driveTrainright.changeControlMode(TalonControlMode.Position);
+    	RobotMap.driveTrainleft.set(ControlMode.Position, 4096); //change this? only @4096 because that is the number
+    	RobotMap.driveTrainright.set(ControlMode.Position, 4096);//of ticks for the MAG encoder.
     	
-    	RobotMap.driveTrainleft.setSetpoint(setpointleft);
-    	RobotMap.driveTrainright.setSetpoint(setpointright);
+    	RobotMap.driveTrainleft.setSelectedSensorPosition(setpointleft, 0, 10);
+    	RobotMap.driveTrainright.setSelectedSensorPosition(setpointright, 0, 10);
     	
-    	RobotMap.driveTrainleft.setPID(kP, kI, kD, kF, izone, ramprate, profile); //PID Left
-    	RobotMap.driveTrainright.setPID(kP, kI, kD, kF, izone, ramprate, profile);//PID right
+    	RobotMap.driveTrainleft.config_kP((int)kP, 0, 10);
+    	RobotMap.driveTrainleft.config_kI((int)kI, 0, 10);
+    	RobotMap.driveTrainleft.config_kD((int)kD, 0, 10);
+    	RobotMap.driveTrainleft.config_kF((int)kF, 0, 10);
+    	RobotMap.driveTrainleft.configClosedloopRamp(ramprate, 2);
+    	RobotMap.driveTrainleft.selectProfileSlot(profile, 0);
+    	RobotMap.driveTrainleft.config_IntegralZone(izone, 0, 10);  /*.setPID(kP, kI, kD, kF, izone, ramprate, profile);*/ //PID Left
+    	//RobotMap.driveTrainright.setPID(kP, kI, kD, kF, izone, ramprate, profile);//PID right
+    	RobotMap.driveTrainright.config_kP((int)kP, 0, 10);
+    	RobotMap.driveTrainright.config_kI((int)kI, 0, 10);
+    	RobotMap.driveTrainright.config_kD((int)kD, 0, 10);
+    	RobotMap.driveTrainright.config_kF((int)kF, 0, 10);
+    	RobotMap.driveTrainright.configClosedloopRamp(ramprate, 2);
+    	RobotMap.driveTrainright.selectProfileSlot(profile, 0);
+    	RobotMap.driveTrainright.config_IntegralZone(izone, 0, 10);
     	
     	
-    	m_outputleft = RobotMap.driveTrainleft.pidGet();	//gets PID output for left side.
-    	m_outputright = RobotMap.driveTrainright.pidGet();	//gets PID output for right side.
+    	m_outputleft = RobotMap.driveTrainleft.getActiveTrajectoryPosition();//.pidGet();	//gets PID output for left side.
+    	m_outputright = RobotMap.driveTrainright.getActiveTrajectoryPosition();//.pidGet();	//gets PID output for right side.
     	
     	
         // Use these to get going:
@@ -64,14 +79,12 @@ public class encoder extends Subsystem {
     	outputright = m_outputright;
         // Use output to drive your system, like a motor
         // e.g. yourMotor.set(output);
-    	RobotMap.driveTrainleft.set(outputleft);
-    	RobotMap.driveTrainright.set(outputright);
+    	RobotMap.driveTrainleft.set(ControlMode.PercentOutput, outputleft);
+    	RobotMap.driveTrainright.set(ControlMode.PercentOutput, outputright);
     }
     
     public void done() {
-    	RobotMap.driveTrainleft.set(0);
-    	RobotMap.driveTrainright.set(0);
-    	RobotMap.driveTrainleft.changeControlMode(TalonControlMode.PercentVbus);
-    	RobotMap.driveTrainright.changeControlMode(TalonControlMode.PercentVbus);
+    	RobotMap.driveTrainleft.set(ControlMode.PercentOutput, 0);
+    	RobotMap.driveTrainright.set(ControlMode.PercentOutput, 0);
     }
 }

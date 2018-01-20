@@ -3,7 +3,6 @@ package org.usfirst.frc5638.shiftyTenk.subsystems;
 import org.usfirst.frc5638.shiftyTenk.Robot;
 import org.usfirst.frc5638.shiftyTenk.RobotMap;
 import org.usfirst.frc5638.shiftyTenk.commands.*;
-import com.ctre.MotorControl.CANTalon;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDController;

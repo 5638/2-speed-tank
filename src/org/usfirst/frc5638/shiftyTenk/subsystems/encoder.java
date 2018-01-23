@@ -7,8 +7,10 @@ import org.usfirst.frc5638.shiftyTenk.RobotMap;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motion.*;
 
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  *
@@ -25,6 +27,7 @@ public class encoder extends Subsystem {
 	private double m_outputright;
 	public int setpointleft;
 	public int setpointright;
+	static final double kToleranceDegrees = 2.0f;
     // Initialize your subsystem here
     public encoder() {
     	RobotMap.driveTrainleft.set(ControlMode.Position, 4096); //change this? only @4096 because that is the number
@@ -39,7 +42,7 @@ public class encoder extends Subsystem {
     	RobotMap.driveTrainleft.config_kF((int)kF, 0, 10);
     	RobotMap.driveTrainleft.configClosedloopRamp(ramprate, 2);
     	RobotMap.driveTrainleft.selectProfileSlot(profile, 0);
-    	RobotMap.driveTrainleft.config_IntegralZone(izone, 0, 10);  /*.setPID(kP, kI, kD, kF, izone, ramprate, profile);*/ //PID Left
+    	RobotMap.driveTrainleft.config_IntegralZone(izone, 0, 10);  //.setPID(kP, kI, kD, kF, izone, ramprate, profile); //PID Left
     	//RobotMap.driveTrainright.setPID(kP, kI, kD, kF, izone, ramprate, profile);//PID right
     	RobotMap.driveTrainright.config_kP((int)kP, 0, 10);
     	RobotMap.driveTrainright.config_kI((int)kI, 0, 10);
@@ -52,6 +55,8 @@ public class encoder extends Subsystem {
     	
     	m_outputleft = RobotMap.driveTrainleft.getActiveTrajectoryPosition();//.pidGet();	//gets PID output for left side.
     	m_outputright = RobotMap.driveTrainright.getActiveTrajectoryPosition();//.pidGet();	//gets PID output for right side.
+    	
+ 
     	
     	
         // Use these to get going:
@@ -87,4 +92,5 @@ public class encoder extends Subsystem {
     	RobotMap.driveTrainleft.set(ControlMode.PercentOutput, 0);
     	RobotMap.driveTrainright.set(ControlMode.PercentOutput, 0);
     }
+
 }

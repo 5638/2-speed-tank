@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -24,10 +25,11 @@ public class rotateAngle extends PIDSubsystem implements PIDOutput {
 	public PIDController turnController;
 	double rotateToAngleRate;
 	double currentRotationRate;
+	public double m_setpoint;
 	
 	//Tune this vvvvv
 	
-	static final double kP = 10;
+	static final double kP = 1;
 	static final double kI = 0.0;		//BAD VALUES
 	static final double kD = 0.00;
 	static final double kF = .00;
@@ -38,11 +40,13 @@ public class rotateAngle extends PIDSubsystem implements PIDOutput {
     static final double kToleranceDegrees = 2.0f;
 
 
-    public rotateAngle() {
-    	super("rotateAngle", kP, kI, kD);
+    public rotateAngle(double setpoint) {
+    	super("rotateAngle", kP, kI, kD, kF, .01);
+    	setpoint = m_setpoint;
+    	setSetpoint(setpoint);
     	setAbsoluteTolerance(kToleranceDegrees);
     	getPIDController().setContinuous(true);
-    	LiveWindow.addActuator("rotateAngle", "PIDSubsystem Controller", getPIDController());
+    	LiveWindow.add(getPIDController());
     	
     	
     	//Communications with the NavX on the MXP SPI Bus
@@ -51,7 +55,7 @@ public class rotateAngle extends PIDSubsystem implements PIDOutput {
         } catch (RuntimeException ex ) {
             DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
         }
-    	LiveWindow.addSensor("rotateAngle", "Gyro NavX", ahrs);
+    	LiveWindow.add(ahrs);
     	
     	//Communications with the NavX on the MXP SPI Bus
     	/*
